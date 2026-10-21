@@ -1,0 +1,94 @@
+specification {
+  element person {
+    style {
+      shape person
+    }
+  }
+  element system
+  element externalSystem {
+    style {
+      color gray
+    }
+  }
+  element container
+  element database {
+    style {
+      shape cylinder
+    }
+  }
+}
+
+model {
+  resident = person 'Prospective resident' {
+    description 'Plans to move to Switzerland and wants to find a municipality that fits'
+  }
+
+  operator = person 'Operator' {
+    description 'Runs the data import when new data is published'
+  }
+
+  gemeindespiegel = system 'Gemeindespiegel' {
+    description 'Compares Swiss municipalities by key figures such as electricity prices'
+
+    web = container 'Web app' {
+      technology 'Next.js'
+      description 'Municipality list with search, canton filter and sorting. The only public part'
+    }
+
+    api = container 'API' {
+      technology 'NestJS'
+      description 'Serves municipality data to the web app. Owns the database schema (migrations)'
+    }
+
+    importer = container 'Import job' {
+      technology 'Python, command line'
+      description 'Fetches open data, maps it to the current BFS municipality list and stores it'
+    }
+
+    db = database 'Database' {
+      technology 'PostgreSQL'
+      description 'Municipalities and electricity tariffs'
+    }
+  }
+
+  bfs = externalSystem 'BFS municipality register' {
+    description 'Federal Statistical Office, official list of all Swiss municipalities'
+  }
+
+  elcom = externalSystem 'ElCom electricity tariffs' {
+    description 'Federal Electricity Commission, tariffs per municipality via LINDAS'
+  }
+
+  resident -> web 'compares municipalities' {
+    technology 'HTTPS'
+  }
+  web -> api 'reads municipalities from' {
+    technology 'HTTP/JSON, internal network'
+  }
+  api -> db 'reads from' {
+    technology 'SQL'
+  }
+
+  operator -> importer 'starts manually'
+  importer -> bfs 'imports municipality list from' {
+    technology 'REST, CSV'
+  }
+  importer -> elcom 'imports electricity tariffs from' {
+    technology 'SPARQL'
+  }
+  importer -> db 'writes imported data to' {
+    technology 'SQL'
+  }
+}
+
+views {
+  view index {
+    title 'System context'
+    include *
+  }
+
+  view containers of gemeindespiegel {
+    title 'Containers'
+    include *
+  }
+}
