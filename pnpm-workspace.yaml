@@ -1,0 +1,6 @@
+allowBuilds:
+  nx: true
+  sharp: false
+  unrs-resolver: false
+  '@swc/core': false
+  esbuild: false

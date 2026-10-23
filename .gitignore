@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# nx
+.nx/cache/
+.nx/workspace-data/
+
+# build and test output
+dist/
+coverage/
+*.tsbuildinfo
+
+# local secrets, only the example file is shared
+.env
+.env.*
+!.env.example
+
+# Next.js
+.next
+out
+vitest.config.*.timestamp*
+.vitest
