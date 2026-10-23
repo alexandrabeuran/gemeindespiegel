@@ -5,6 +5,7 @@ on:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch:
 
 # A new push to the same branch makes the previous run obsolete.
 concurrency:
@@ -39,7 +40,13 @@ jobs:
       # --all because without it Nx only checks changed files and misses drift elsewhere.
       - run: pnpm nx format:check --all
 
-      - run: pnpm nx affected -t lint typecheck test build
+      - if: github.event_name != 'workflow_dispatch'
+        run: pnpm nx affected -t lint typecheck test build
+
+      # affected finds nothing when no project changed since the base (e.g. the very first run),
+      # so a manual run checks the whole workspace to prove it is green.
+      - if: github.event_name == 'workflow_dispatch'
+        run: pnpm nx run-many -t lint typecheck test build
 
   gitleaks:
     runs-on: ubuntu-latest
