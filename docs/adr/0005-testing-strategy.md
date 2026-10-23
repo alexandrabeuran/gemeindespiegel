@@ -27,13 +27,13 @@ used on which level, and what does CI require before a merge?
 Chosen option: "Framework defaults per app", because each app is tested the way
 its community expects.
 
-| Level | Tools |
-|---|---|
+| Level                                            | Tools                                            |
+| ------------------------------------------------ | ------------------------------------------------ |
 | Unit and component (Next.js, Angular, libraries) | Vitest and Testing Library, API mocking with MSW |
-| Unit (NestJS) | Jest |
-| Integration | Testcontainers (real PostgreSQL) and Supertest |
-| Python | pytest |
-| End-to-end | Playwright with axe for accessibility |
+| Unit (NestJS)                                    | Jest                                             |
+| Integration                                      | Testcontainers (real PostgreSQL) and Supertest   |
+| Python                                           | pytest                                           |
+| End-to-end                                       | Playwright with axe for accessibility            |
 
 ### Consequences
 
