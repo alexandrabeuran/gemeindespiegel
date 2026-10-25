@@ -4,3 +4,5 @@ allowBuilds:
   unrs-resolver: false
   '@swc/core': false
   esbuild: false
+  '@parcel/watcher': false
+  '@nestjs/core': false
