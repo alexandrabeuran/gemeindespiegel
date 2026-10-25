@@ -12,3 +12,4 @@ Format: [MADR](https://adr.github.io/madr/). See [ADR 0001](0001-record-architec
 | [0006](0006-backend-for-frontend.md)          | Browser talks only to Next.js (backend for frontend)  | proposed |
 | [0007](0007-python-import-job.md)             | Import open data with a separate Python job           | proposed |
 | [0008](0008-diagrams-as-code-with-likec4.md)  | Architecture diagrams as code with LikeC4             | proposed |
+| [0009](0009-database-access-with-typeorm.md)  | Database access with TypeORM                          | proposed |
