@@ -1,6 +1,6 @@
 # C1 Repo foundation
 
-Status: draft, 2026-10-21
+Status: done, 2026-10-25
 
 ## Goal
 
@@ -12,7 +12,8 @@ and nothing reaches `main` without a green pull request.
 
 - Nx workspace with pnpm, Node 24 LTS (pinned in `.nvmrc` and `engines`).
 - TypeScript in strict mode (`tsconfig.base.json`).
-- ESLint and Prettier for the whole workspace.
+- ESLint and Prettier for the whole workspace. ESLint warnings fail the check
+  (`--max-warnings=0`), locally and in CI.
 - One app: `apps/web`, an empty Next.js "hello world" page with one Vitest
   and Testing Library test. It exists so that CI checks real code from day one.
 - Git hooks with husky: lint-staged (ESLint and Prettier on staged files)
