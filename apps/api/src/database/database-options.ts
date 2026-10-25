@@ -1,4 +1,9 @@
-import type { PostgresDataSourceOptions } from 'typeorm/driver/postgres/PostgresDataSourceOptions';
+import type { DataSourceOptions } from 'typeorm';
+
+type PostgresDataSourceOptions = Extract<
+  DataSourceOptions,
+  { type: 'postgres' }
+>;
 
 type Env = Record<string, string | undefined>;
 
