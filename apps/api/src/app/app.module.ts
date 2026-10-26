@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseOptions } from '../database/database-options';
+import { ElectricityModule } from '../electricity/electricity.module';
+import { MunicipalitiesModule } from '../municipalities/municipalities.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -14,6 +16,8 @@ import { AppService } from './app.service';
         autoLoadEntities: true,
       }),
     }),
+    MunicipalitiesModule,
+    ElectricityModule,
   ],
   controllers: [AppController],
   providers: [AppService],
