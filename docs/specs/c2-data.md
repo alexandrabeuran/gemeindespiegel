@@ -33,7 +33,10 @@ command.
   - ElCom tariffs for profile H4, tariff year 2027, product "standard",
     per grid operator and municipality: total price and its five parts
     (energy, grid usage, levies, grid surcharge, metering), in Rp./kWh.
-    The total equals the sum of the parts.
+    The total is stored as published by ElCom. ElCom rounds each value to
+    three decimals, so the total may differ from the sum of the parts by
+    up to 0.001. A larger difference means invalid data and stops the
+    import.
   - Every ElCom municipality number must exist in the current BFS snapshot.
     If not, the import stops with a clear message. (For 2027 ElCom already
     uses the current list. Mapping merged municipalities comes when an
@@ -63,12 +66,41 @@ command.
 
 ## Data notes (checked 2026-10-23)
 
-- BFS REST: `communes/snapshots?useBfsCode=true`, CSV, 2110 municipalities
-  (level 3), 144 districts (level 2), 26 cantons (level 1).
+- BFS REST: `https://www.agvchapp.bfs.admin.ch/api/communes/snapshot?date=DD-MM-YYYY&useBfsCode=true`
+  (checked 2026-10-26), CSV, 2110 municipalities (level 3), 144 districts
+  (level 2), 26 cantons (level 1). Columns used: `BfsCode`, `Level`,
+  `Parent`, `Name`, `ShortName` (canton abbreviation).
 - ElCom on LINDAS (SPARQL, `https://ld.admin.ch/query`), cube
   `https://energy.ld.admin.ch/elcom/electricityprice`: 2242 rows for H4,
   2027, "standard"; 2109 municipalities, 125 with several operators (up to
-  four). Totals range from 10.6 to 45.9 Rp./kWh.
+  four), 536 operators (numeric ids up to 904). Totals range from 10.6 to
+  45.9 Rp./kWh, all values have at most three decimals. In 593 rows the
+  total differs from the sum of the parts by 0.001 (checked 2026-10-26).
+- ElCom dimensions map to our columns: `total` → `total`, `energy` →
+  `energy`, `gridusage` → `grid_usage`, `charge` → `levies`, `aidfee` →
+  `grid_surcharge`, `meteringrate` → `metering`. The operator id is the last
+  path segment of the operator URI, its name is `schema:name`.
+
+## Data model (decided 2026-10-26)
+
+All names in `snake_case` (ADR 0009). Prices in Rp./kWh as `numeric(7,4)`:
+exact decimals, enough for the three decimals from ElCom and a rounded
+average.
+
+- `canton`: `bfs_number` (primary key), `abbreviation` (e.g. "ZH"), `name`.
+- `municipality`: `bfs_number` (primary key), `name`, `canton_bfs_number`
+  (foreign key to `canton`).
+- `grid_operator`: `elcom_id` (primary key), `name`.
+- `tariff`: one row per grid operator, municipality and tariff year.
+  `id` (primary key), `municipality_bfs_number`, `grid_operator_elcom_id`,
+  `tariff_year`, `total`, `energy`, `grid_usage`, `levies`,
+  `grid_surcharge`, `metering`. Unique on (municipality, grid operator,
+  tariff year).
+- `municipality_price`: one row per municipality and tariff year.
+  Primary key (`municipality_bfs_number`, `tariff_year`), `average_total`,
+  `multiple_operators`. A municipality without ElCom data has no row here.
+- Districts are only used during the import to find the canton and are not
+  stored.
 
 ## Out of scope
 
