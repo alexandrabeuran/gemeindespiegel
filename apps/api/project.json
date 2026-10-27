@@ -69,6 +69,15 @@
         }
       }
     },
+    "migration-generate": {
+      "command": "typeorm-ts-node-commonjs migration:generate src/database/migrations/{args.name} -d src/database/data-source.ts --pretty",
+      "options": {
+        "cwd": "{projectRoot}",
+        "env": {
+          "TS_NODE_PROJECT": "tsconfig.app.json"
+        }
+      }
+    },
     "typecheck": {
       "command": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
       "options": {
