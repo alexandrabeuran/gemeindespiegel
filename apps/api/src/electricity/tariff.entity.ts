@@ -9,7 +9,7 @@ import {
 import { Municipality } from '../municipalities/municipality.entity';
 import { GridOperator } from './grid-operator.entity';
 
-// numeric keeps prices exact, so the parts add up to the total. The pg driver returns numeric as string.
+// numeric stores prices exactly as ElCom publishes them, without float rounding errors. The pg driver returns numeric as string.
 const price = { type: 'numeric', precision: 7, scale: 4 } as const;
 
 @Entity({ name: 'tariff' })
