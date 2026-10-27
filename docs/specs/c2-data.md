@@ -111,6 +111,23 @@ average.
 - Health insurance premiums and further data sets (C5).
 - Historical versions of imported data.
 
+## Steps
+
+One pull request per step (decided 2026-10-26, split 2026-10-27).
+
+- C2.1 PostgreSQL in Docker Compose (done).
+- C2.2 NestJS skeleton with TypeORM connection (done).
+- C2.3 Entities and initial migration (done).
+- C2.4 Importer skeleton: `apps/importer` with uv, ruff, mypy and pytest, a
+  first small test, Nx targets `lint`, `typecheck` and `test` in a plain
+  `project.json` (no Nx Python plugin), Python in CI.
+- C2.5 Reading data: fetch and parse BFS and ElCom, canton lookup, number
+  check, sum check, averaging. Unit tests with shortened real fixtures.
+- C2.6 Writing data: one transaction, idempotent, summary. Testcontainers
+  integration test, locally and in CI.
+- C2.7 `docker compose run --rm importer`, data sources in the README,
+  end-to-end check, spec status "done".
+
 ## Acceptance criteria
 
 1. `docker compose up -d db` starts PostgreSQL; `nx run api:migrate` creates
