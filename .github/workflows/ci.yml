@@ -35,6 +35,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # The importer is Python; uv reads .python-version and installs Python 3.14 itself.
+      # setup-uv publishes no moving major tag (no "v10"), only full versions.
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: 0.13.6
+          enable-cache: true
+          cache-dependency-glob: apps/importer/uv.lock
+          # The runner only ships Python 3.12, so keep the downloaded 3.14 between runs.
+          cache-python: true
+
       - uses: nrwl/nx-set-shas@v5
 
       # --all because without it Nx only checks changed files and misses drift elsewhere.

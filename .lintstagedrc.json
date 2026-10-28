@@ -3,5 +3,9 @@
     "eslint --flag v10_config_lookup_from_file --fix --max-warnings=0",
     "prettier --write"
   ],
-  "*.{json,md,yml,yaml,css}": "prettier --write"
+  "*.{json,md,yml,yaml,css}": "prettier --write",
+  "*.py": [
+    "uv run --frozen --project apps/importer ruff check --fix",
+    "uv run --frozen --project apps/importer ruff format"
+  ]
 }
