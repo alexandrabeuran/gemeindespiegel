@@ -20,3 +20,10 @@ coverage/
 out
 vitest.config.*.timestamp*
 .vitest
+
+# Python (apps/importer)
+.venv/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
