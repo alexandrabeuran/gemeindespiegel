@@ -36,7 +36,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       # The importer is Python; uv reads .python-version and installs Python 3.14 itself.
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv publishes no moving major tag (no "v10"), only full versions.
+      - uses: astral-sh/setup-uv@v10.3.3
         with:
           version: 0.13.6
           enable-cache: true
