@@ -1,0 +1,327 @@
+{
+  "head": {
+    "vars": [
+      "municipality",
+      "operator",
+      "operatorName",
+      "total",
+      "energy",
+      "gridusage",
+      "charge",
+      "aidfee",
+      "meteringrate"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/1"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/486"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätswerke des Kantons Zürich (EKZ)"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "23.872"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.859"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "7.900"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.160"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.653"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/141"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/486"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätswerke des Kantons Zürich (EKZ)"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "23.872"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.859"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "7.900"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.160"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.653"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/219"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/457"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Genossenschaft Elektrizitätswerk Räterschen EWR"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "26.426"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "12.276"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "10.650"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.000"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.200"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/219"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/486"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätswerke des Kantons Zürich (EKZ)"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "23.872"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.859"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "7.900"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.160"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.653"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/219"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/789"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätsgenossenschaft Rümikon EGR"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "28.642"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.967"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "12.775"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.000"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.600"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/261"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/565"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätswerk der Stadt Zürich"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "24.632"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "7.884"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.122"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.300"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.027"
+        }
+      },
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/6158"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/669"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Romande Energie SA"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "28.262"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "13.005"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "10.183"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.000"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.773"
+        }
+      }
+    ]
+  }
+}
