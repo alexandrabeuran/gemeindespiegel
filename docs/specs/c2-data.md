@@ -188,6 +188,68 @@ code 0 and a summary with about 2110 municipalities, about 2109 with a
 price, about 125 with several grid operators. Siselen (499) counts as
 "without price".
 
+## C2.6 Writing data (decided 2026-10-29)
+
+Claude writes the code and explains it.
+
+- Driver: psycopg 3 with plain SQL, no ORM in Python. The schema stays owned
+  by the API migrations (ADR 0007, ADR 0009).
+- Connection: the same variables as the API (`POSTGRES_HOST`,
+  `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`),
+  with the same defaults (`localhost`, `5432`). A missing required value
+  stops the job with a message naming the variable, before any data is
+  fetched.
+- Everything below runs in one transaction. On any error it is rolled back,
+  the previous data stays untouched and the job exits with a non-zero code.
+- Order of writes (all foreign keys are `NO ACTION`):
+  1. Upsert (`INSERT … ON CONFLICT DO UPDATE`) cantons, municipalities and
+     grid operators from the current data.
+  2. Delete all `tariff` and `municipality_price` rows of tariff year 2027.
+  3. Municipalities that are no longer in the BFS snapshot: delete their
+     `tariff` and `municipality_price` rows (all years), then the
+     municipalities themselves.
+  4. Insert the `tariff` and `municipality_price` rows for 2027.
+  5. Delete grid operators that have no tariff left.
+- Rows of other tariff years are never touched, except for deleted
+  municipalities (step 3). Cantons are only upserted, never deleted.
+- Summary: as in C2.5, plus the number of deleted municipalities (decided
+  2026-10-30).
+- Integration test with Testcontainers (`testcontainers[postgres]`, same
+  PostgreSQL image as `compose.yaml`): start the container, run
+  `nx run api:migrate` with the container credentials, then run the import
+  with the C2.5 fixtures (HTTP still mocked) and check the result with SQL.
+  The CI job already has Node for the migration.
+- Integration tests carry the pytest marker `integration`. A new Nx target
+  `test-integration` runs only them. `test` and the pre-commit hook skip
+  them, so they need no Docker. CI runs `test-integration` on every run.
+
+### C2.6 acceptance criteria
+
+1. After an import of the fixtures: Aeugst am Albis (1) and Zürich (261) in
+   canton ZH with a price, Elsau (219) with the average and
+   `multiple_operators`, Siselen (499) without a `municipality_price` row.
+2. A second import gives exactly the same rows (idempotent).
+3. A 2026 tariff of an existing municipality, inserted before the import,
+   is still there afterwards.
+4. A municipality inserted before the import that is not in the fixtures is
+   deleted together with its prices of all years; the summary reports one
+   deleted municipality.
+5. A grid operator inserted before the import without any tariff is gone
+   afterwards.
+6. If the import fails after the first writes (e.g. a forced error before
+   commit), the database is exactly as before.
+7. A missing `POSTGRES_PASSWORD` stops the job with a non-zero code and a
+   message naming the variable (unit test, no database).
+8. `nx run-many -t lint typecheck test -p importer` passes without Docker;
+   `nx run importer:test-integration` passes locally and in CI.
+
+### C2.6 end-to-end check
+
+`docker compose up -d db`, `nx run api:migrate`, then `uv run importer` in
+`apps/importer` with the values from `.env`. Expected: exit code 0, summary
+with about 2110 municipalities and 0 deleted. A second run gives the same
+summary. With `psql`: `select count(*) from municipality` is about 2110.
+
 ## Acceptance criteria
 
 1. `docker compose up -d db` starts PostgreSQL; `nx run api:migrate` creates
