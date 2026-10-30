@@ -3,7 +3,9 @@ name = "importer"
 version = "0.1.0"
 description = "Imports Swiss municipalities (BFS) and electricity prices (ElCom) into PostgreSQL"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "requests>=2.34.2",
+]
 
 [project.scripts]
 importer = "importer:main"
@@ -16,7 +18,9 @@ build-backend = "uv_build"
 dev = [
     "mypy>=2.4.0",
     "pytest>=9.2.0",
+    "responses>=0.26.3",
     "ruff>=0.17.3",
+    "types-requests>=2.33.0.20261006",
 ]
 
 [tool.ruff]
@@ -29,6 +33,12 @@ select = ["E", "F", "W", "I", "B", "UP", "N", "SIM", "RUF"]
 [tool.mypy]
 strict = true
 files = ["src", "tests"]
+
+# Parsed source data must leave the parsers fully typed. Tests are exempt: they
+# edit JSON documents freely to build broken responses.
+[[tool.mypy.overrides]]
+module = ["importer", "importer.*"]
+disallow_any_expr = true
 
 [tool.pytest]
 testpaths = ["tests"]

@@ -1,0 +1,63 @@
+{
+  "head": {
+    "vars": [
+      "municipality",
+      "operator",
+      "operatorName",
+      "total",
+      "energy",
+      "gridusage",
+      "charge",
+      "aidfee",
+      "meteringrate"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "municipality": {
+          "type": "uri",
+          "value": "https://ld.admin.ch/municipality/1"
+        },
+        "operator": {
+          "type": "uri",
+          "value": "https://energy.ld.admin.ch/elcom/electricityprice/operator/486"
+        },
+        "operatorName": {
+          "type": "literal",
+          "value": "Elektrizitätswerke des Kantons Zürich (EKZ)"
+        },
+        "total": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "23.874"
+        },
+        "energy": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "11.859"
+        },
+        "gridusage": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "7.900"
+        },
+        "charge": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "0.160"
+        },
+        "aidfee": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "2.300"
+        },
+        "meteringrate": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+          "type": "literal",
+          "value": "1.653"
+        }
+      }
+    ]
+  }
+}

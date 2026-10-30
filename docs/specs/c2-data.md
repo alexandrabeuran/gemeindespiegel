@@ -68,8 +68,12 @@ command.
 
 - BFS REST: `https://www.agvchapp.bfs.admin.ch/api/communes/snapshot?date=DD-MM-YYYY&useBfsCode=true`
   (checked 2026-10-26), CSV, 2110 municipalities (level 3), 144 districts
-  (level 2), 26 cantons (level 1). Columns used: `BfsCode`, `Level`,
-  `Parent`, `Name`, `ShortName` (canton abbreviation).
+  (level 2), 26 cantons (level 1). Columns used: `HistoricalCode`,
+  `BfsCode`, `Level`, `Parent`, `Name`, `ShortName` (canton abbreviation).
+  `Parent` refers to the `HistoricalCode` of the level above, not to the
+  `BfsCode`. `HistoricalCode` is only unique within a level (district Horgen
+  and the municipality Vionnaz are both 10078), so lookups are per level
+  (checked 2026-10-29).
 - ElCom on LINDAS (SPARQL, `https://ld.admin.ch/query`), cube
   `https://energy.ld.admin.ch/elcom/electricityprice`: 2242 rows for H4,
   2027, "standard"; 2109 municipalities, 125 with several operators (up to
@@ -127,6 +131,62 @@ One pull request per step (decided 2026-10-26, split 2026-10-27).
   integration test, locally and in CI.
 - C2.7 `docker compose run --rm importer`, data sources in the README,
   end-to-end check, spec status "done".
+
+## C2.5 Reading data (decided 2026-10-29)
+
+Claude writes the code and explains it.
+
+- HTTP with `requests` (plus `types-requests` for mypy). One fixed timeout
+  (30 s), no retries: on any network error or non-2xx status the job stops
+  with a clear message naming the source.
+- Fetching and parsing are separate: parsers take the response text and
+  return typed data, so the domain logic is tested without HTTP. The small
+  fetch layer (URL, timeout, error status) is tested with `responses`.
+- BFS: snapshot of the day the job runs, CSV. Structural check: required
+  columns present, every municipality finds its district and canton,
+  otherwise the import stops. No fixed counts.
+- ElCom: SPARQL query sent to LINDAS, result as SPARQL JSON.
+- Prices are `Decimal`, never `float`. Sum check: |total - sum of parts|
+  must be at most 0.001, otherwise the import stops and names the
+  municipality and grid operator.
+- Number check: an ElCom municipality number missing in the BFS snapshot
+  stops the import and names the number.
+- Added after review (2026-10-29): an empty ElCom result stops the import
+  (every per-row check passes on zero rows, and C2.6 would replace the
+  tariff year with nothing). A duplicate (municipality, grid operator) pair
+  in ElCom and a duplicate code within one BFS level also stop it.
+- Average for municipalities with several grid operators: plain mean of the
+  totals, rounded half up to four decimals; flag "multiple operators".
+- `uv run importer` fetches both sources, runs all checks and prints the
+  summary (municipalities, with price, without, with several operators).
+  Exit code 0 on success, non-zero with a message otherwise. Nothing is
+  written to the database yet (C2.6).
+- Fixtures (real, shortened responses in `apps/importer/tests/fixtures/`):
+  BFS with Aeugst am Albis (1) and Zürich (261) with their district and
+  canton ZH, Siselen (499) with its district and canton BE; ElCom with one
+  municipality with several grid operators and one row with a 0.001
+  difference. Small error fixtures: unknown municipality number, difference
+  of 0.002, BFS municipality without district, BFS district without canton.
+  Added during implementation:
+  Elsau (219, three grid operators), and Thalwil (141) with Vionnaz (6158)
+  for the shared `HistoricalCode` 10078.
+
+### C2.5 acceptance criteria
+
+1. Unit tests cover: BFS parsing and canton lookup, BFS structural check,
+   ElCom parsing, number check (criterion 5 above), sum check (0.001
+   passes, 0.002 fails), averaging and flag (criterion 6 above), the fetch
+   layer (timeout and error status).
+2. `nx run-many -t lint typecheck test -p importer` passes; mypy strict
+   without `Any` leaks from the parsers.
+3. No test opens a real network connection.
+
+### C2.5 end-to-end check
+
+`uv run importer` in `apps/importer` with network access. Expected: exit
+code 0 and a summary with about 2110 municipalities, about 2109 with a
+price, about 125 with several grid operators. Siselen (499) counts as
+"without price".
 
 ## Acceptance criteria
 
