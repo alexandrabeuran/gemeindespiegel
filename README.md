@@ -24,7 +24,7 @@ that imports Swiss municipalities and their electricity prices.
 
 ## Running locally
 
-Requirements: Node.js 24 and pnpm.
+Requirements: Node.js 26 and pnpm.
 
 ```sh
 pnpm install
