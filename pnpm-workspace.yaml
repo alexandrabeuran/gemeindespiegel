@@ -1,3 +1,6 @@
+# Fail fast when the local Node version does not match engines.node.
+engineStrict: true
+
 allowBuilds:
   nx: true
   sharp: false
