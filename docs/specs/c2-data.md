@@ -1,6 +1,6 @@
 # C2 Data foundation
 
-Status: draft, 2026-10-23
+Status: done, 2026-10-31
 
 ## Goal
 
@@ -134,8 +134,6 @@ One pull request per step (decided 2026-10-26, split 2026-10-27).
 
 ## C2.5 Reading data (decided 2026-10-29)
 
-Claude writes the code and explains it.
-
 - HTTP with `requests` (plus `types-requests` for mypy). One fixed timeout
   (30 s), no retries: on any network error or non-2xx status the job stops
   with a clear message naming the source.
@@ -189,8 +187,6 @@ price, about 125 with several grid operators. Siselen (499) counts as
 "without price".
 
 ## C2.6 Writing data (decided 2026-10-29)
-
-Claude writes the code and explains it.
 
 - Driver: psycopg 3 with plain SQL, no ORM in Python. The schema stays owned
   by the API migrations (ADR 0007, ADR 0009).
@@ -252,8 +248,6 @@ summary. With `psql`: `select count(*) from municipality` is about 2110.
 
 ## C2.7 Running the import with Docker Compose (decided 2026-10-31)
 
-Claude writes the code and explains it.
-
 - `apps/importer/Dockerfile` with two stages. The build stage uses the
   official uv image with Python 3.14 (slim, uv pinned to the CI version) and
   runs `uv sync --locked --no-dev`, dependencies before the source so that a
@@ -290,7 +284,8 @@ Claude writes the code and explains it.
    the dev tools (ruff, mypy, pytest).
 3. A second run prints the same summary.
 4. With the database stopped, the job exits with a non-zero code and a
-   clear message.
+   clear message. `depends_on` makes `docker compose run` start the database
+   again, so this check uses `--no-deps` (decided 2026-10-31).
 5. CI builds the importer image on every run.
 6. The README lists the data sources with attribution and the local import
    steps; markdownlint passes.
@@ -335,5 +330,6 @@ clone.
    (BFS 1, canton ZH): both have a plausible price between 10 and 46 Rp./kWh.
    Siselen (BFS 499) has no price.
 5. Run the import again. Expected: same counts.
-6. Stop the database container (`docker compose stop db`) and run the import.
+6. Stop the database container (`docker compose stop db`) and run the import
+   without starting it again (`docker compose run --rm --no-deps importer`).
    Expected: non-zero exit code and a clear error message.
