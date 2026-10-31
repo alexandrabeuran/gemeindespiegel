@@ -1,6 +1,6 @@
 # C2 Data foundation
 
-Status: draft, 2026-10-23
+Status: done, 2026-10-31
 
 ## Goal
 
@@ -134,8 +134,6 @@ One pull request per step (decided 2026-10-26, split 2026-10-27).
 
 ## C2.5 Reading data (decided 2026-10-29)
 
-Claude writes the code and explains it.
-
 - HTTP with `requests` (plus `types-requests` for mypy). One fixed timeout
   (30 s), no retries: on any network error or non-2xx status the job stops
   with a clear message naming the source.
@@ -189,8 +187,6 @@ price, about 125 with several grid operators. Siselen (499) counts as
 "without price".
 
 ## C2.6 Writing data (decided 2026-10-29)
-
-Claude writes the code and explains it.
 
 - Driver: psycopg 3 with plain SQL, no ORM in Python. The schema stays owned
   by the API migrations (ADR 0007, ADR 0009).
@@ -250,6 +246,57 @@ Claude writes the code and explains it.
 with about 2110 municipalities and 0 deleted. A second run gives the same
 summary. With `psql`: `select count(*) from municipality` is about 2110.
 
+## C2.7 Running the import with Docker Compose (decided 2026-10-31)
+
+- `apps/importer/Dockerfile` with two stages. The build stage uses the
+  official uv image with Python 3.14 (slim, uv pinned to the CI version) and
+  runs `uv sync --locked --no-dev`, dependencies before the source so that a
+  code change does not reinstall them. The runtime stage is
+  `python:3.14-slim` with only the virtual environment and the package, runs
+  as a non-root user and starts `importer`. uv, tests and dev tools are not
+  in the final image. A `.dockerignore` keeps `.venv` and caches out of the
+  build context.
+- Compose service `importer` in `compose.yaml`: built from `apps/importer`,
+  profile `jobs` so that `docker compose up` does not start it,
+  `depends_on` the `db` service with `condition: service_healthy`.
+  Credentials come from `.env`; `POSTGRES_HOST=db` and `POSTGRES_PORT=5432`
+  are set in the service, because inside the Compose network the database
+  is not on `localhost` and not on the published port.
+- Migrations still run on the host with `nx run api:migrate` (an API image
+  follows in C3).
+- CI builds the importer image without pushing it (GHCR follows in C3), so
+  a broken Dockerfile fails the pull request.
+- README:
+  - data sources with attribution: BFS register of municipalities, ElCom
+    electricity prices via LINDAS (licence "Open use"),
+  - a section on importing data locally (`.env`, `docker compose up -d db`,
+    `nx run api:migrate`, `docker compose run --rm importer`),
+  - the status sentence updated (database and import exist),
+  - the importer commands (uv, ruff, mypy, pytest, `test-integration`).
+- After the end-to-end check below passes, the spec status becomes "done".
+
+### C2.7 acceptance criteria
+
+1. `docker compose up -d db` does not start the importer.
+   `docker compose run --rm importer` imports real data, exits with code 0
+   and prints a summary with about 2110 municipalities.
+2. The container runs as a non-root user and contains neither the tests nor
+   the dev tools (ruff, mypy, pytest).
+3. A second run prints the same summary.
+4. With the database stopped, the job exits with a non-zero code and a
+   clear message. `depends_on` makes `docker compose run` start the database
+   again, so this check uses `--no-deps` (decided 2026-10-31).
+5. CI builds the importer image on every run.
+6. The README lists the data sources with attribution and the local import
+   steps; markdownlint passes.
+7. All acceptance criteria of this spec (section "Acceptance criteria") are
+   checked; the status is "done".
+
+### C2.7 end-to-end check
+
+The end-to-end check of this spec (section "End-to-end check"), from a fresh
+clone.
+
 ## Acceptance criteria
 
 1. `docker compose up -d db` starts PostgreSQL; `nx run api:migrate` creates
@@ -283,5 +330,6 @@ summary. With `psql`: `select count(*) from municipality` is about 2110.
    (BFS 1, canton ZH): both have a plausible price between 10 and 46 Rp./kWh.
    Siselen (BFS 499) has no price.
 5. Run the import again. Expected: same counts.
-6. Stop the database container (`docker compose stop db`) and run the import.
+6. Stop the database container (`docker compose stop db`) and run the import
+   without starting it again (`docker compose run --rm --no-deps importer`).
    Expected: non-zero exit code and a clear error message.

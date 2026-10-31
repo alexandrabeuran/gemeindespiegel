@@ -62,6 +62,15 @@ jobs:
       # already has Docker for Testcontainers, so it is cheap enough to run every time.
       - run: pnpm nx run importer:test-integration
 
+  importer-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Build only, no push (GHCR follows in C3): a broken Dockerfile fails the pull request.
+      # Plain docker build, because docker compose build would need the .env values.
+      - run: docker build --tag gemeindespiegel-importer apps/importer
+
   gitleaks:
     runs-on: ubuntu-latest
     steps:

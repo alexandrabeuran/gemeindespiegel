@@ -3,5 +3,5 @@
     // Prettier owns formatting (line length, table padding); markdownlint checks structure.
     "extends": "markdownlint/style/prettier",
   },
-  "globs": ["docs/**/*.md"],
+  "globs": ["README.md", "docs/**/*.md"],
 }

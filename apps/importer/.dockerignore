@@ -1,0 +1,10 @@
+# The image builds its own venv; local caches and tests only slow down the build context.
+.venv/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+tests/
+project.json
+Dockerfile
+.dockerignore
