@@ -32,6 +32,14 @@
         "command": "uv run --locked pytest",
         "forwardAllArgs": false
       }
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/importer",
+        "command": "uv run --locked pytest -m integration",
+        "forwardAllArgs": false
+      }
     }
   }
 }

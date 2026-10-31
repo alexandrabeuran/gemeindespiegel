@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Imports Swiss municipalities (BFS) and electricity prices (ElCom) into PostgreSQL"
 requires-python = ">=3.14"
 dependencies = [
+    "psycopg[binary]>=3.3.6",
     "requests>=2.34.2",
 ]
 
@@ -20,6 +21,7 @@ dev = [
     "pytest>=9.2.0",
     "responses>=0.26.3",
     "ruff>=0.17.3",
+    "testcontainers[postgres]>=4.15.0",
     "types-requests>=2.33.0.20261006",
 ]
 
@@ -44,3 +46,6 @@ disallow_any_expr = true
 testpaths = ["tests"]
 # Fail on unknown markers and config keys instead of silently ignoring typos.
 strict = true
+markers = ["integration: needs Docker (Testcontainers), run with nx run importer:test-integration"]
+# Plain pytest (and nx test) must work without Docker; a later -m on the command line wins.
+addopts = ["-m", "not integration"]
