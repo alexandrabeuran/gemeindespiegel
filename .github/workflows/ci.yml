@@ -58,6 +58,10 @@ jobs:
       - if: github.event_name == 'workflow_dispatch'
         run: pnpm nx run-many -t lint typecheck test build
 
+      # Not part of affected: the import depends on the API migrations, and the runner
+      # already has Docker for Testcontainers, so it is cheap enough to run every time.
+      - run: pnpm nx run importer:test-integration
+
   gitleaks:
     runs-on: ubuntu-latest
     steps:

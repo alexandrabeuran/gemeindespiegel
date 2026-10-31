@@ -26,6 +26,7 @@ class Summary:
     with_price: int
     without_price: int
     multiple_operators: int
+    deleted: int
 
 
 def read_data(day: date) -> ImportData:
@@ -39,7 +40,7 @@ def read_data(day: date) -> ImportData:
     return ImportData(municipalities, tariffs, average_prices(tariffs))
 
 
-def summarize(data: ImportData) -> Summary:
+def summarize(data: ImportData, deleted: int) -> Summary:
     # The number check guarantees that every price belongs to a known municipality.
     with_price = len(data.prices)
     return Summary(
@@ -47,6 +48,7 @@ def summarize(data: ImportData) -> Summary:
         with_price=with_price,
         without_price=len(data.municipalities) - with_price,
         multiple_operators=sum(1 for p in data.prices.values() if p.multiple_operators),
+        deleted=deleted,
     )
 
 
@@ -57,5 +59,6 @@ def format_summary(summary: Summary) -> str:
             f"  with price: {summary.with_price}",
             f"  without price: {summary.without_price}",
             f"  with several grid operators: {summary.multiple_operators}",
+            f"  deleted: {summary.deleted}",
         ]
     )
