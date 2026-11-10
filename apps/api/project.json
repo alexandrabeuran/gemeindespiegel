@@ -69,6 +69,15 @@
         }
       }
     },
+    "migration-revert": {
+      "command": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
+      "options": {
+        "cwd": "{projectRoot}",
+        "env": {
+          "TS_NODE_PROJECT": "tsconfig.app.json"
+        }
+      }
+    },
     "migration-generate": {
       "command": "typeorm-ts-node-commonjs migration:generate src/database/migrations/{args.name} -d src/database/data-source.ts --pretty",
       "options": {

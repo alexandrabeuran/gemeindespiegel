@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { Canton } from './canton.entity';
 
 @Entity({ name: 'municipality' })
@@ -9,6 +16,7 @@ export class Municipality {
   @Column({ name: 'name', type: 'text' })
   name!: string;
 
+  @Index('idx_municipality_canton')
   @ManyToOne(() => Canton, { nullable: false })
   @JoinColumn({ name: 'canton_bfs_number' })
   canton!: Canton;
