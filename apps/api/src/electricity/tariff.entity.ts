@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -26,6 +27,8 @@ export class Tariff {
   @JoinColumn({ name: 'municipality_bfs_number' })
   municipality!: Municipality;
 
+  // The municipality needs no index of its own: the unique constraint above starts with it.
+  @Index('idx_tariff_grid_operator')
   @ManyToOne(() => GridOperator, { nullable: false })
   @JoinColumn({ name: 'grid_operator_elcom_id' })
   gridOperator!: GridOperator;
