@@ -9,3 +9,7 @@ allowBuilds:
   esbuild: false
   '@parcel/watcher': false
   '@nestjs/core': false
+  # Pulled in by testcontainers: native SSH speed-ups and a version notice, not needed for a local Docker socket.
+  cpu-features: false
+  ssh2: false
+  protobufjs: false
