@@ -97,6 +97,16 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "test-e2e": {
+      "command": "jest -c jest.e2e.config.cts --runInBand",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "metadata": {
+        "description": "Service and HTTP tests against PostgreSQL in Testcontainers (needs Docker)."
+      }
     }
   }
 }
