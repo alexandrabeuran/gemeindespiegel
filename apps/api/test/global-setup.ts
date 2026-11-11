@@ -17,15 +17,21 @@ export default async function globalSetup(): Promise<void> {
   process.env['POSTGRES_DB'] = container.getDatabase();
 
   // The real migrations through the same Nx target as the importer test, so there is one way to build the schema.
-  execFileSync(
-    'pnpm',
-    ['exec', 'nx', 'run', 'api:migrate', '--skip-nx-cache'],
-    {
-      cwd: REPO_ROOT,
-      env: process.env,
-      stdio: 'inherit',
-    },
-  );
+  try {
+    execFileSync(
+      'pnpm',
+      ['exec', 'nx', 'run', 'api:migrate', '--skip-nx-cache'],
+      {
+        cwd: REPO_ROOT,
+        env: process.env,
+        stdio: 'inherit',
+      },
+    );
+  } catch (error) {
+    // Jest skips globalTeardown when globalSetup fails, so the container has to be stopped here.
+    await container.stop();
+    throw error;
+  }
 
   // globalTeardown runs in the same process, so a global is the documented way to hand over the container.
   globalThis.postgresContainer = container;

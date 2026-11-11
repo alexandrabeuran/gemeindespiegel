@@ -33,7 +33,8 @@ export async function startApi(): Promise<RunningApi> {
   return {
     url: `http://localhost:${port}`,
     async stop() {
-      if (child.exitCode === null) {
+      // A process killed by a signal keeps exitCode null and sets signalCode; waiting for "exit" again would hang.
+      if (child.exitCode === null && child.signalCode === null) {
         child.kill('SIGTERM');
         await once(child, 'exit');
       }
